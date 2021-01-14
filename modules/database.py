@@ -1,13 +1,16 @@
 import psycopg2
+import os
 
 class Database(object):
 
-    def __init__(self, dev=os.environ['DEV']):
-        
+    def __init__(self, dev=os.environ['DEV'], ronly=True):
+        if ronly is True:
+            self.user = os.environ['DB_USER_RONLY']
+        elif ronly is False:
+            self.user = os.environ['DB_USER']
         if dev == 'PROD':
             self.dbname = os.environ['DB_NAME']
             self.host = os.environ['DB_HOST']
-            self.user = os.environ['DB_USER']
             self.password = os.environ['DB_PASS']
             self.port = os.environ['DB_PORT']
             self.conn = psycopg2.connect(dbname=self.dbname, host=self.host, user=self.user, password=self.password, port=self.port)
@@ -16,7 +19,6 @@ class Database(object):
         elif dev == 'DEV':
             self.dbname = os.environ['DEV_DB_NAME']
             self.host = os.environ['DEV_DB_HOST']
-            self.user = os.environ['DEV_DB_USER']
             self.password = os.environ['DEV_DB_PASS']
             self.port = os.environ['DEV_DB_PORT']
             self.conn = psycopg2.connect(dbname=self.dbname, host=self.host, user=self.user, password=self.password, port=self.port)
