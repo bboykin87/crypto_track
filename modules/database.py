@@ -26,6 +26,37 @@ class Database(object):
             self.errors = psycopg2.errors
         self.wallet_table='crypto.wallet'
 
+    def execute_db(self, sql):
+        """Used to execute basic sql queries by passing sql statement as string
+
+        Args:
+            sql (string): SQL query
+
+        Returns:
+            string: statusmessage as returned by the DB
+            string: bytes encoded string representation of sql query used.
+        """
+        self.cur.execute(sql)
+        self.conn.commit()
+        return self.cur.statusmessage, self.cur.query
+
+    def insert_returning(self, sql, return_column):
+        """Inserts SQL query into db and gets requested returned value
+
+        Args:
+            sql (string): SQL Insert statement
+            return_column (string): Column to provide returned value
+
+        Returns:
+            string: statusmessage as returned by the DB
+            string: bytes encoded string representation of sql query used
+            string: returned value from requested column
+        """
+        sql = f"{sql} RETURNING {return_column}"
+        self.cur.execute(sql)
+        self.conn.commit()
+        return self.cur.statusmessage, self.cur.query, self.cur.fetchone()[0]
+
     def add_wallet(self,coin_id, wallet_type, exchange_id, address):
         """Adds a wallet to the DB using coin_id, wallet_type (cold, exchange, etc.), exchange id, 
            and wallet address.
@@ -59,4 +90,4 @@ class Database(object):
         Args:
             symbol ([string]): Coin market symbol (i.e. BTC, XRP)
         """
-
+        pass
