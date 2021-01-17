@@ -89,4 +89,4 @@ def test_id_check():
     with pytest.raises(CoinIdError):
         crypto.id_check()
 
-    
+# def test_coin_create(db_connection):
