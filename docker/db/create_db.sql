@@ -1,5 +1,8 @@
 CREATE SCHEMA crypto;
 
+ALTER SCHEMA crypto
+    OWNER TO cwatch;
+
 -- SEQUENCE: crypto.coins_id_seq
 
 -- DROP SEQUENCE crypto.coins_id_seq;
@@ -173,6 +176,19 @@ TABLESPACE pg_default;
 
 ALTER TABLE crypto.wallet
     OWNER to cwatch;
+
+create table crypto.test
+(
+	test text not null,
+	test_number integer not null,
+	test_date date DEFAULT CURRENT_DATE,
+	test_time time with time zone DEFAULT CURRENT_TIME
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE crypto.test
+	OWNER TO cwatch;
 
 GRANT SELECT ON crypto.wallet TO cwatch_ronly;
 
