@@ -89,4 +89,12 @@ def test_id_check():
     with pytest.raises(CoinIdError):
         crypto.id_check()
 
-# def test_coin_create(db_connection):
+def test_coin_create(db_connection):
+    coin=Coin('Bitcoin', 'BTC')
+    assert coin.symbol_check() == 'Valid'
+    assert coin.coin_name_check() == 'Valid'
+    coin_id_sql = f'SELECT id FROM crypto.coins'
+    db_connection.cur.execute(coin_id_sql)
+    r = db_connection.cur.fetchone()
+    # coin_create should check symbol and coin name and return coin_id
+    assert coin.coin_create(coin.coin_name, coin.symbol) == 
